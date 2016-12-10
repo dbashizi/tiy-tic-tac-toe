@@ -9,7 +9,7 @@ public class TicTacToeGame {
     private Player lastPlayerWhoMoved;
     private boolean gameOver = false;
     private Player winner;
-    private boolean debugMoves = false;
+    private boolean debugMoves = true;
 
 
     public TicTacToeGame() {
@@ -24,6 +24,33 @@ public class TicTacToeGame {
             colIndex = 0;
             rowIndex++;
         }
+    }
+
+    public TicTacToeGame(boolean labelSquares) {
+        this();
+        if (labelSquares) {
+            int squareIndex = 1;
+            int rowIndex = 0;
+            int colIndex = 0;
+            for (char[] cols : squares) {
+                for (char square : cols) {
+                    squares[rowIndex][colIndex] = Character.forDigit(squareIndex, 10);
+                    colIndex++;
+                    squareIndex++;
+                }
+                colIndex = 0;
+                rowIndex++;
+            }
+        }
+
+    }
+
+    public int getRowIndex(int squareIndex) {
+        return (squareIndex - 1) / 3;
+    }
+
+    public int getColIndex(int squareIndex) {
+        return (squareIndex - 1) % 3;
     }
 
     public void makeMove(Player player, int row, int col) throws InvalidMoveException {

@@ -181,4 +181,45 @@ public class TicTacToeGameTest {
         game.makeMove(player1, 0, 0);
     }
 
+    @Test
+    public void testCoordinateConversion() {
+        int rowIndex = game.getRowIndex(1);
+        assertEquals(0, rowIndex);
+        rowIndex = game.getRowIndex(2);
+        assertEquals(0, rowIndex);
+        rowIndex = game.getRowIndex(3);
+        assertEquals(0, rowIndex);
+        rowIndex = game.getRowIndex(4);
+        assertEquals(1, rowIndex);
+        rowIndex = game.getRowIndex(5);
+        assertEquals(1, rowIndex);
+        rowIndex = game.getRowIndex(6);
+        assertEquals(1, rowIndex);
+        rowIndex = game.getRowIndex(7);
+        assertEquals(2, rowIndex);
+        rowIndex = game.getRowIndex(8);
+        assertEquals(2, rowIndex);
+        rowIndex = game.getRowIndex(9);
+        assertEquals(2, rowIndex);
+
+        int colIndex = game.getColIndex(1);
+        assertEquals(0, colIndex);
+        colIndex = game.getColIndex(2);
+        assertEquals(1, colIndex);
+        colIndex = game.getColIndex(3);
+        assertEquals(2, colIndex);
+        colIndex = game.getColIndex(4);
+        assertEquals(0, colIndex);
+        colIndex = game.getColIndex(5);
+        assertEquals(1, colIndex);
+        colIndex = game.getColIndex(6);
+        assertEquals(2, colIndex);
+        colIndex = game.getColIndex(7);
+        assertEquals(0, colIndex);
+        colIndex = game.getColIndex(8);
+        assertEquals(1, colIndex);
+        colIndex = game.getColIndex(9);
+        assertEquals(2, colIndex);
+    }
+
 }
