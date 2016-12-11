@@ -9,6 +9,8 @@ public class TicTacToeUltimateGame {
     private TicTacToeGame[][] games;
     private boolean debugMoves = true;
     private TicTacToeGame activeGame = null;
+    private boolean gameOver = false;
+    private Player winner = null;
 
     public TicTacToeUltimateGame() {
         games = new TicTacToeGame[3][3];
@@ -34,11 +36,16 @@ public class TicTacToeUltimateGame {
             }
         }
         game.makeMove(player, rowIndex, colIndex);
-
-        activeGame = games[rowIndex][colIndex];
-        if (activeGame.isGameOver()) {
+        if (game.isGameOver()) {
             activeGame = null;
+        } else {
+            activeGame = games[rowIndex][colIndex];
+            if (activeGame.isGameOver()) {
+                activeGame = null;
+            }
         }
+
+        checkAndSetWinner(player);
 
         if (debugMoves) {
             printBoard();
@@ -84,7 +91,67 @@ public class TicTacToeUltimateGame {
             System.out.println("Active Game: Game " + squareIndex);
             activeGame.printBoard();
         } else {
-            System.out.println("Active Game: Any Game");
+            if (!isGameOver()) {
+                System.out.println("Active Game: Any Game");
+            } else {
+                System.out.println("Game Over!");
+            }
         }
+    }
+
+    private void checkAndSetWinner(Player player) {
+        // check if player won horizontally
+        for (TicTacToeGame[] gameRow : games) {
+            if (gameRow[0].getWinner() != null && gameRow[0].getWinner().equals(player) &&
+                    gameRow[1].getWinner() != null && gameRow[1].getWinner().equals(player) &&
+                    gameRow[2].getWinner() != null && gameRow[2].getWinner().equals(player)) {
+                gameOver = true;
+            }
+        }
+
+        // check if player won vertically
+        for (int colIndex = 0; colIndex < 3; colIndex++) {
+            if (games[0][colIndex].getWinner() != null && games[0][colIndex].getWinner().equals(player) &&
+                    games[1][colIndex].getWinner() != null && games[1][colIndex].getWinner().equals(player) &&
+                    games[2][colIndex].getWinner() != null && games[2][colIndex].getWinner().equals(player)) {
+                gameOver = true;
+            }
+        }
+
+        // check if player won diagonally
+        if (games[0][0].getWinner() != null && games[0][0].getWinner().equals(player) &&
+                games[1][1].getWinner() != null && games[1][1].getWinner().equals(player) &&
+                games[2][2].getWinner() != null && games[2][2].getWinner().equals(player)) {
+            gameOver = true;
+        }
+
+        if (gameOver) {
+            winner = player;
+        }
+
+        // it's possible that the game is over and no one won
+        boolean gameAvailable = false;
+        for (TicTacToeGame[] gameRow : games) {
+            for (TicTacToeGame game : gameRow) {
+                if (!game.isGameOver()) {
+                    gameAvailable = true;
+                    break;
+                }
+            }
+            if (gameAvailable) {
+                break;
+            }
+        }
+        if (!gameAvailable) {
+            gameOver = true;
+        }
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public Player getWinner() {
+        return winner;
     }
 }

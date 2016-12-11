@@ -32,7 +32,7 @@ public class GameRunner {
 
         while (true) {
             TicTacToeUltimateGame ultimateGame = new TicTacToeUltimateGame();
-            while (true) { // replace with checking if ultimate game is over
+            while (!ultimateGame.isGameOver()) { // replace with checking if ultimate game is over
                 TicTacToeGame game = ultimateGame.getActiveGame();
                 if (game == null) {
                     System.out.println("Please choose a board to play on (enter 0 to display the ultimate board");
@@ -57,13 +57,9 @@ public class GameRunner {
                     game = ultimateGame.getSpecificGame(boardChoice);
                 }
                 makeUltimateMove(ultimateGame, game, player2, inputScanner, rulesGame);
-
-                if (false) {
-                    break;
-                }
             }
 
-            if (game.getWinner() != null) {
+            if (ultimateGame.getWinner() != null) {
                 System.out.println(game.getWinner().getName() + " wins!");
             } else {
                 System.out.println("It's a draw!");
