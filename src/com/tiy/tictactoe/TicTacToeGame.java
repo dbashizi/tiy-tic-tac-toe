@@ -10,7 +10,8 @@ public class TicTacToeGame {
     private boolean gameOver = false;
     private Player winner;
     private boolean debugMoves = true;
-
+    private int ultimateRowIndex;
+    private int ultimateColIndex;
 
     public TicTacToeGame() {
         squares = new char[3][3];
@@ -24,6 +25,8 @@ public class TicTacToeGame {
             colIndex = 0;
             rowIndex++;
         }
+        this.ultimateRowIndex = 0;
+        this.ultimateColIndex = 0;
     }
 
     public TicTacToeGame(boolean labelSquares) {
@@ -45,12 +48,22 @@ public class TicTacToeGame {
 
     }
 
-    public int getRowIndex(int squareIndex) {
+    public TicTacToeGame(boolean labelSquares, int ultimateRowIndex, int ultimateColIndex) {
+        this(labelSquares);
+        this.ultimateRowIndex = ultimateRowIndex;
+        this.ultimateColIndex = ultimateColIndex;
+    }
+
+    public static int getRowIndex(int squareIndex) {
         return (squareIndex - 1) / 3;
     }
 
-    public int getColIndex(int squareIndex) {
+    public static int getColIndex(int squareIndex) {
         return (squareIndex - 1) % 3;
+    }
+
+    public static int getSquareIndex(int rowIndex, int colIndex) {
+        return ((rowIndex * 3) + colIndex + 1);
     }
 
     public void makeMove(Player player, int row, int col) throws InvalidMoveException {
@@ -119,19 +132,49 @@ public class TicTacToeGame {
     }
 
     public void printBoard() {
-        int colIndex = 0;
-        int rowIndex = 0;
         System.out.println(" -------------");
-        for (char[] cols : squares) {
-            for (char square : cols) {
+        for (char[] rows : squares) {
+            for (char square : rows) {
                 System.out.print(" | " + square);
-                colIndex++;
             }
             System.out.println(" |");
-            colIndex = 0;
-            rowIndex++;
         }
         System.out.println(" -------------");
+    }
+
+    public StringBuilder[] getBoardAsSBs() {
+        int rowIndex = 0;
+        StringBuilder[] rowsAsSBs = new StringBuilder[5];
+        StringBuilder rowAsSB = new StringBuilder();
+        int squareIndex = getSquareIndex(ultimateRowIndex, ultimateColIndex);
+        for (int letterIndex = 0; letterIndex < 14; letterIndex++) {
+            if (letterIndex == 0) {
+                rowAsSB.append(squareIndex);
+            } else {
+                rowAsSB.append("-");
+            }
+        }
+//        rowAsSB.append(" -------------");
+        rowsAsSBs[rowIndex] = rowAsSB;
+        rowIndex++;
+
+        for (char[] rows : squares) {
+            rowAsSB = new StringBuilder();
+            for (char square : rows) {
+                rowAsSB.append(" | " + square);
+            }
+            rowAsSB.append(" |");
+            rowsAsSBs[rowIndex] = rowAsSB;
+            rowIndex++;
+        }
+        rowAsSB = new StringBuilder();
+        for (int letterIndex = 0; letterIndex < 14; letterIndex++) {
+            rowAsSB.append("-");
+        }
+        rowsAsSBs[rowIndex] = rowAsSB;
+        rowIndex++;
+
+        return rowsAsSBs;
     }
 
     public boolean isGameOver() {
@@ -145,4 +188,26 @@ public class TicTacToeGame {
     public void setDebugMoves(boolean debugMoves) {
         this.debugMoves = debugMoves;
     }
+
+    public int getUltimateRowIndex() {
+        return ultimateRowIndex;
+    }
+
+    public int getUltimateColIndex() {
+        return ultimateColIndex;
+    }
+
+    @Override
+    public boolean equals(Object otherObject) {
+        if (otherObject == null) {
+            return false;
+        }
+        TicTacToeGame otherGame = (TicTacToeGame) otherObject;
+        if (otherGame.getUltimateRowIndex() == ultimateRowIndex &&
+                otherGame.getUltimateColIndex() == ultimateColIndex ) {
+            return true;
+        }
+        return false;
+    }
+
 }
